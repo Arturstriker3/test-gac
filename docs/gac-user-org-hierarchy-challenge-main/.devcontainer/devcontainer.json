@@ -1,0 +1,13 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+        "name": "dev_test",
+        // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+        "dockerComposeFile": "docker-compose.yaml",
+        "service": "dev",
+        "workspaceFolder": "/workspaces/dev_test",
+        "features": {
+                "ghcr.io/devcontainers-extra/features/nestjs-cli:2": {}
+        },
+        "postStartCommand": "yarn install"
+}

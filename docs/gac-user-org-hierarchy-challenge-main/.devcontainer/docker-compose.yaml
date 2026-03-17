@@ -1,0 +1,9 @@
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspaces/dev_test
+    ports:
+      - "3000:3000"

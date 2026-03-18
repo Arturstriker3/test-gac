@@ -1,0 +1,10 @@
+apiVersion: 1
+providers:
+  - name: gac-dashboards
+    orgId: 1
+    folder: GAC
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards

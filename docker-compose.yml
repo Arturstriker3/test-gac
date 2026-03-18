@@ -1,0 +1,76 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: gac_postgres
+    ports:
+      - "${DB_PORT}:5432"
+    env_file:
+      - .env.example
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gac_api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env.example
+    environment:
+      DB_HOST: postgres
+      PORT: ${PORT}
+    ports:
+      - "${PORT}:${PORT}"
+
+  loki:
+    image: grafana/loki:3.1.1
+    container_name: gac_loki
+    command: ["-config.file=/etc/loki/local-config.yaml"]
+    ports:
+      - "${LOKI_PORT}:3100"
+    volumes:
+      - ./telemetry/loki-config.yaml:/etc/loki/local-config.yaml:ro
+
+  promtail:
+    image: grafana/promtail:3.1.1
+    container_name: gac_promtail
+    command: ["-config.file=/etc/promtail/config.yml"]
+    depends_on:
+      - loki
+    volumes:
+      - ./telemetry/promtail-config.yaml:/etc/promtail/config.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  grafana:
+    image: grafana/grafana:11.1.4
+    container_name: gac_grafana
+    depends_on:
+      - loki
+    ports:
+      - "${GRAFANA_PORT}:3000"
+    env_file:
+      - .env.example
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./telemetry/grafana-datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml:ro
+      - ./telemetry/grafana-dashboards-provider.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml:ro
+      - ./telemetry/grafana-dashboard-logs.json:/var/lib/grafana/dashboards/gac-logs.json:ro
+
+volumes:
+  postgres_data:
+  grafana_data:

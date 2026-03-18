@@ -1,0 +1,70 @@
+{
+  "id": null,
+  "uid": "gac-logs",
+  "title": "GAC API Logs",
+  "tags": ["gac", "logs"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "5s",
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "logs",
+      "title": "Todos os logs da API",
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "datasource": "Loki",
+      "targets": [
+        {
+          "expr": "{container=\"gac_api\"}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "logs",
+      "title": "Somente erros",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "datasource": "Loki",
+      "targets": [
+        {
+          "expr": "{container=\"gac_api\"} |= \"\\\"log.level\\\":\\\"error\\\"\"",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "logs",
+      "title": "Logs com trace e span",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "datasource": "Loki",
+      "targets": [
+        {
+          "expr": "{container=\"gac_api\"} |= \"\\\"trace.id\\\":\\\"\"",
+          "refId": "A"
+        }
+      ]
+    }
+  ]
+}

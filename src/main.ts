@@ -5,9 +5,11 @@ import {
   NestFastifyApplication,
 } from "@nestjs/platform-fastify";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { ZodValidationPipe } from "./common/validation/zod-validation.pipe";
 import { AppModule } from "./app.module";
 import { AppConfigService } from "./common/config/app-config.service";
 import { MigrationRunnerService } from "./common/database/migration-runner.service";
+import { DomainErrorFilter } from "./modules/organization/presentation/rest/domain-error.filter";
 
 async function bootstrap(): Promise<void> {
   const logger = new Logger("Bootstrap");
@@ -17,6 +19,8 @@ async function bootstrap(): Promise<void> {
   );
   const appConfig = app.get(AppConfigService);
   const migrationRunner = app.get(MigrationRunnerService);
+  app.useGlobalPipes(new ZodValidationPipe());
+  app.useGlobalFilters(new DomainErrorFilter());
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle("Teste GAC API")

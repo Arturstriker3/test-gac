@@ -58,12 +58,12 @@ describe("GET /users/:id/organizations", () => {
       {
         id: childGroup.id,
         name: "Engenharia",
-        depth: 0,
+        depth: 1,
       },
       {
         id: parentGroup.id,
         name: "Empresa",
-        depth: 1,
+        depth: 2,
       },
     ]);
   });

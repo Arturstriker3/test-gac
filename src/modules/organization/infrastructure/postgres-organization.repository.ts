@@ -162,7 +162,7 @@ export class PostgresOrganizationRepository implements OrganizationRepository {
       SELECT
         groups.id,
         groups.name,
-        MIN(closure.depth)::int AS depth
+        (MIN(closure.depth) + 1)::int AS depth
       FROM user_group_links links
       INNER JOIN node_closure closure ON closure.descendant_id = links.group_id
       INNER JOIN nodes groups ON groups.id = closure.ancestor_id

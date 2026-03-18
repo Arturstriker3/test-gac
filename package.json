@@ -3,11 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "bunx @nestjs/cli start --watch",
-    "build": "bunx @nestjs/cli build",
-    "start": "node dist/main.js",
-    "lint": "bunx eslint \"src/**/*.ts\" --max-warnings 0",
-    "typecheck": "bunx tsc --noEmit",
+    "dev": "bun run ./node_modules/@nestjs/cli/bin/nest.js start --watch",
+    "build": "bun run ./node_modules/@nestjs/cli/bin/nest.js build",
+    "start": "bun dist/main.js",
+    "migration:create": "bun run src/common/database/cli/create-migration.ts",
+    "lint": "bun run ./node_modules/eslint/bin/eslint.js \"src/**/*.ts\" --max-warnings 0",
+    "typecheck": "bun run ./node_modules/typescript/bin/tsc --noEmit",
     "test": "bun test"
   },
   "dependencies": {

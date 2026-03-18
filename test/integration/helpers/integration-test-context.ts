@@ -29,6 +29,13 @@ export interface OrganizationRelationResponse {
   depth: number;
 }
 
+export interface ErrorResponse {
+  statusCode: number;
+  code: string;
+  message: string;
+  details: unknown;
+}
+
 export function parseJson<T>(payload: string): T {
   return JSON.parse(payload) as T;
 }

@@ -13,6 +13,7 @@ export function mapDomainError(error: DomainError): HttpException {
       statusCode: 400,
       code: "BAD_REQUEST",
       message: error.message,
+      details: null,
     });
   }
 
@@ -21,6 +22,7 @@ export function mapDomainError(error: DomainError): HttpException {
       statusCode: 404,
       code: "NOT_FOUND",
       message: error.message,
+      details: null,
     });
   }
 
@@ -29,6 +31,7 @@ export function mapDomainError(error: DomainError): HttpException {
       statusCode: 409,
       code: "CONFLICT",
       message: error.message,
+      details: null,
     });
   }
 
@@ -36,5 +39,6 @@ export function mapDomainError(error: DomainError): HttpException {
     statusCode: 422,
     code: "INVALID_NODE_TYPE",
     message: error.message,
+    details: null,
   });
 }

@@ -1,11 +1,11 @@
 {
   "id": null,
   "uid": "gac-logs",
-  "title": "GAC API Logs",
+  "title": "GAC API - Logs e Métricas",
   "tags": ["gac", "logs"],
   "timezone": "browser",
   "schemaVersion": 39,
-  "version": 1,
+  "version": 2,
   "refresh": "5s",
   "time": {
     "from": "now-15m",
@@ -13,14 +13,172 @@
   },
   "panels": [
     {
+      "id": 10,
+      "type": "stat",
+      "title": "Eventos por minuto",
+      "description": "Quantidade total de eventos gerados pela API no último minuto.",
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      },
+      "datasource": "Loki",
+      "options": {
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      },
+      "targets": [
+        {
+          "expr": "sum(count_over_time({container=\"gac_api\"}[1m]))",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "stat",
+      "title": "Erros por minuto",
+      "description": "Quantidade de erros por minuto. Idealmente deve ficar próximo de zero.",
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 8,
+        "y": 0
+      },
+      "datasource": "Loki",
+      "options": {
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      },
+      "targets": [
+        {
+          "expr": "sum(count_over_time({container=\"gac_api\"} |= \"\\\"log.level\\\":\\\"error\\\"\" [1m]))",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "type": "stat",
+      "title": "Criações por minuto",
+      "description": "Total de operações de criação (usuários e grupos) por minuto.",
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "datasource": "Loki",
+      "options": {
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      },
+      "targets": [
+        {
+          "expr": "sum(count_over_time({container=\"gac_api\"} |= \"node created\" [1m]))",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "type": "timeseries",
+      "title": "Volume de eventos ao longo do tempo",
+      "description": "Mostra se a API está processando mais ou menos eventos durante o teste.",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "datasource": "Loki",
+      "targets": [
+        {
+          "expr": "sum(count_over_time({container=\"gac_api\"}[1m]))",
+          "legendFormat": "Eventos/min",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "type": "timeseries",
+      "title": "Erros ao longo do tempo",
+      "description": "Se aparecer pico nesse gráfico, existe falha acontecendo no período.",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "datasource": "Loki",
+      "targets": [
+        {
+          "expr": "sum(count_over_time({container=\"gac_api\"} |= \"\\\"log.level\\\":\\\"error\\\"\" [1m]))",
+          "legendFormat": "Erros/min",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "type": "timeseries",
+      "title": "Criação de usuários e grupos",
+      "description": "Comparação entre criação de usuários e criação de grupos sob carga.",
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "datasource": "Loki",
+      "targets": [
+        {
+          "expr": "sum(count_over_time({container=\"gac_api\"} |= \"user node created\" [1m]))",
+          "legendFormat": "Usuários criados/min",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(count_over_time({container=\"gac_api\"} |= \"group node created\" [1m]))",
+          "legendFormat": "Grupos criados/min",
+          "refId": "B"
+        }
+      ]
+    },
+    {
       "id": 1,
       "type": "logs",
       "title": "Todos os logs da API",
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 20
       },
       "datasource": "Loki",
       "targets": [
@@ -38,7 +196,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 9
+        "y": 28
       },
       "datasource": "Loki",
       "targets": [
@@ -56,7 +214,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 9
+        "y": 28
       },
       "datasource": "Loki",
       "targets": [

@@ -1,0 +1,19 @@
+services:
+  challenge-load:
+    image: python:3.12-slim
+    container_name: gac_challenge_load
+    working_dir: /challenge
+    environment:
+      BASE_URL: ${CHALLENGE_BASE_URL:-http://host.docker.internal:3000}
+      CHALLENGE_LOCUST_USERS: ${CHALLENGE_LOCUST_USERS:-30}
+      CHALLENGE_LOCUST_SPAWN_RATE: ${CHALLENGE_LOCUST_SPAWN_RATE:-5}
+      CHALLENGE_LOCUST_DURATION: ${CHALLENGE_LOCUST_DURATION:-2m}
+    volumes:
+      - ./docs/gac-user-org-hierarchy-challenge-main:/challenge
+    command: >
+      sh -c "pip install --no-cache-dir -r requirements.txt &&
+      locust -f locustfile.py --headless
+      -u $$CHALLENGE_LOCUST_USERS
+      -r $$CHALLENGE_LOCUST_SPAWN_RATE
+      -t $$CHALLENGE_LOCUST_DURATION
+      --host $$BASE_URL"

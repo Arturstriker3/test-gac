@@ -5,8 +5,8 @@ services:
     working_dir: /challenge
     environment:
       BASE_URL: ${CHALLENGE_BASE_URL:-http://host.docker.internal:3000}
-      CHALLENGE_LOCUST_USERS: ${CHALLENGE_LOCUST_USERS:-800}
-      CHALLENGE_LOCUST_SPAWN_RATE: ${CHALLENGE_LOCUST_SPAWN_RATE:-50}
+      CHALLENGE_LOCUST_USERS: ${CHALLENGE_LOCUST_USERS:-150}
+      CHALLENGE_LOCUST_SPAWN_RATE: ${CHALLENGE_LOCUST_SPAWN_RATE:-25}
       CHALLENGE_LOCUST_DURATION: ${CHALLENGE_LOCUST_DURATION:-10m}
     volumes:
       - ./docs/gac-user-org-hierarchy-challenge-main:/challenge

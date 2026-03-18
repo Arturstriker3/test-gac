@@ -1,0 +1,12 @@
+services:
+  challenge-tests:
+    image: python:3.12-slim
+    container_name: gac_challenge_tests
+    working_dir: /challenge
+    environment:
+      BASE_URL: ${CHALLENGE_BASE_URL:-http://host.docker.internal:3000}
+    volumes:
+      - ./docs/gac-user-org-hierarchy-challenge-main:/challenge
+    command: >
+      sh -c "pip install --no-cache-dir -r requirements.txt &&
+      pytest -v"

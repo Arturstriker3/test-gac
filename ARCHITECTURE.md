@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Este documento define somente o necessário para passar no desafio de hierarquia organizacional.
+Este documento define a estrutura para o desafio de hierarquia organizacional.
 
 ## Escopo funcional obrigatório
 

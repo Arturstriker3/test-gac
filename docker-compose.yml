@@ -2,6 +2,8 @@ services:
   postgres:
     image: postgres:18-alpine
     container_name: gac_postgres
+    cpus: 1.0
+    mem_limit: 2g
     ports:
       - "${DB_PORT}:5432"
     env_file:
@@ -23,6 +25,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: gac_api
+    cpus: 1.0
+    mem_limit: 2g
     depends_on:
       postgres:
         condition: service_healthy

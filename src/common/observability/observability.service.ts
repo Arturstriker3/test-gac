@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import {
   SpanStatusCode,
   type Attributes,
@@ -10,9 +10,30 @@ import { getTracer, initializeTelemetry } from "./telemetry";
 type LogLevel = "debug" | "info" | "warn" | "error";
 
 @Injectable()
-export class ObservabilityService {
+export class ObservabilityService implements OnModuleInit, OnModuleDestroy {
+  private readonly runtimeMetricsIntervalMs = 5000;
+  private runtimeMetricsTimer: NodeJS.Timeout | null = null;
+  private previousCpuUsage = process.cpuUsage();
+  private previousCpuTime = process.hrtime.bigint();
+  private expectedTickAt = Date.now() + this.runtimeMetricsIntervalMs;
+
   constructor() {
     initializeTelemetry();
+  }
+
+  onModuleInit(): void {
+    this.runtimeMetricsTimer = setInterval(() => {
+      this.emitRuntimeMetrics();
+    }, this.runtimeMetricsIntervalMs);
+    this.runtimeMetricsTimer.unref();
+  }
+
+  onModuleDestroy(): void {
+    if (!this.runtimeMetricsTimer) {
+      return;
+    }
+    clearInterval(this.runtimeMetricsTimer);
+    this.runtimeMetricsTimer = null;
   }
 
   async runInSpan<T>(
@@ -79,7 +100,10 @@ export class ObservabilityService {
     }
 
     const spanContext = span.spanContext();
-    if (!this.hasValue(spanContext.traceId) || !this.hasValue(spanContext.spanId)) {
+    if (
+      !this.hasValue(spanContext.traceId) ||
+      !this.hasValue(spanContext.spanId)
+    ) {
       return null;
     }
 
@@ -89,6 +113,43 @@ export class ObservabilityService {
   private hasValue(value: string): boolean {
     const normalized = value.replace(/0/g, "");
     return normalized.length > 0;
+  }
+
+  private emitRuntimeMetrics(): void {
+    const now = Date.now();
+    const eventLoopLagMs = Math.max(0, now - this.expectedTickAt);
+    this.expectedTickAt = now + this.runtimeMetricsIntervalMs;
+
+    const currentCpuUsage = process.cpuUsage();
+    const currentCpuTime = process.hrtime.bigint();
+    const elapsedCpuMs =
+      Number(currentCpuTime - this.previousCpuTime) / 1_000_000;
+    const usedCpuMicros =
+      currentCpuUsage.user -
+      this.previousCpuUsage.user +
+      (currentCpuUsage.system - this.previousCpuUsage.system);
+    const cpuUsagePercent =
+      elapsedCpuMs > 0
+        ? Number(((usedCpuMicros / 1000 / elapsedCpuMs) * 100).toFixed(2))
+        : 0;
+
+    this.previousCpuUsage = currentCpuUsage;
+    this.previousCpuTime = currentCpuTime;
+
+    const memoryUsage = process.memoryUsage();
+    this.info("runtime metrics", {
+      "event.dataset": "gac.runtime",
+      "metric.kind": "runtime",
+      runtime_cpu_usage_percent: cpuUsagePercent,
+      runtime_memory_rss_mb: this.toMegabytes(memoryUsage.rss),
+      runtime_memory_heap_used_mb: this.toMegabytes(memoryUsage.heapUsed),
+      runtime_memory_heap_total_mb: this.toMegabytes(memoryUsage.heapTotal),
+      runtime_event_loop_lag_ms: Number(eventLoopLagMs.toFixed(2)),
+    });
+  }
+
+  private toMegabytes(valueInBytes: number): number {
+    return Number((valueInBytes / (1024 * 1024)).toFixed(2));
   }
 
   private toError(value: unknown): Error {

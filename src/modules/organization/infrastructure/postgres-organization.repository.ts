@@ -6,8 +6,13 @@ import {
   InvalidNodeTypeDomainError,
   NotFoundDomainError,
 } from "../domain/organization.errors";
-import { OrganizationRepository } from "../domain/organization.repository";
-import { NODE_TYPES, Node, NodeType, OrganizationRelation } from "../domain/node.types";
+import type { OrganizationRepository } from "../domain/organization.repository";
+import {
+  NODE_TYPES,
+  Node,
+  NodeType,
+  OrganizationRelation,
+} from "../domain/node.types";
 
 interface NodeRow {
   id: string;
@@ -116,7 +121,10 @@ export class PostgresOrganizationRepository implements OrganizationRepository {
     }
   }
 
-  async linkUserToGroup(input: { userId: string; groupId: string }): Promise<void> {
+  async linkUserToGroup(input: {
+    userId: string;
+    groupId: string;
+  }): Promise<void> {
     await this.assertNodeType(input.userId, NODE_TYPES.USER);
     await this.assertNodeType(input.groupId, NODE_TYPES.GROUP);
 

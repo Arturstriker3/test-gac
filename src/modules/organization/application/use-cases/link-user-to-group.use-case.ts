@@ -2,8 +2,8 @@ import { Inject, Injectable } from "@nestjs/common";
 import { BadRequestDomainError } from "../../domain/organization.errors";
 import {
   ORGANIZATION_REPOSITORY,
-  OrganizationRepository,
 } from "../../domain/organization.repository";
+import type { OrganizationRepository } from "../../domain/organization.repository";
 
 interface LinkUserToGroupInput {
   userId: string;

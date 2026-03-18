@@ -5,8 +5,8 @@ import {
 } from "../../domain/organization.errors";
 import {
   ORGANIZATION_REPOSITORY,
-  OrganizationRepository,
 } from "../../domain/organization.repository";
+import type { OrganizationRepository } from "../../domain/organization.repository";
 import { NODE_TYPES, OrganizationRelation } from "../../domain/node.types";
 
 @Injectable()

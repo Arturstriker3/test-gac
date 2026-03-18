@@ -19,7 +19,12 @@
       "description": "Quantas requisições a API atende por segundo neste momento.",
       "gridPos": { "h": 4, "w": 3, "x": 0, "y": 0 },
       "datasource": "Loki",
-      "targets": [{ "refId": "A", "expr": "sum(rate({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" [1m]))" }]
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" [1m]))"
+        }
+      ]
     },
     {
       "id": 2,
@@ -28,7 +33,12 @@
       "description": "Percentual de requisições com falha. Quanto menor, melhor.",
       "gridPos": { "h": 4, "w": 3, "x": 3, "y": 0 },
       "datasource": "Loki",
-      "targets": [{ "refId": "A", "expr": "100 * sum(rate({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | http_success=false [1m])) / sum(rate({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" [1m]))" }]
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "100 * sum(rate({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | http_success=\"false\" [1m])) / sum(rate({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" [1m]))"
+        }
+      ]
     },
     {
       "id": 3,
@@ -37,7 +47,12 @@
       "description": "Quantidade de falhas por minuto.",
       "gridPos": { "h": 4, "w": 3, "x": 6, "y": 0 },
       "datasource": "Loki",
-      "targets": [{ "refId": "A", "expr": "sum(count_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | http_success=false [1m]))" }]
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | http_success=\"false\" [1m]))"
+        }
+      ]
     },
     {
       "id": 4,
@@ -46,7 +61,12 @@
       "description": "Tempo médio que cada requisição leva para responder.",
       "gridPos": { "h": 4, "w": 3, "x": 9, "y": 0 },
       "datasource": "Loki",
-      "targets": [{ "refId": "A", "expr": "avg(avg_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | unwrap http_duration_ms [5m]))" }]
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "avg(avg_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | unwrap http_duration_ms [5m]))"
+        }
+      ]
     },
     {
       "id": 5,
@@ -55,7 +75,12 @@
       "description": "Metade das respostas ficam abaixo deste tempo.",
       "gridPos": { "h": 4, "w": 3, "x": 12, "y": 0 },
       "datasource": "Loki",
-      "targets": [{ "refId": "A", "expr": "quantile_over_time(0.50, {container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | unwrap http_duration_ms [5m])" }]
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "quantile_over_time(0.50, {container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | unwrap http_duration_ms [5m])"
+        }
+      ]
     },
     {
       "id": 6,
@@ -64,7 +89,12 @@
       "description": "95% das respostas ficam abaixo deste tempo.",
       "gridPos": { "h": 4, "w": 3, "x": 15, "y": 0 },
       "datasource": "Loki",
-      "targets": [{ "refId": "A", "expr": "quantile_over_time(0.95, {container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | unwrap http_duration_ms [5m])" }]
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "quantile_over_time(0.95, {container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | unwrap http_duration_ms [5m])"
+        }
+      ]
     },
     {
       "id": 7,
@@ -73,7 +103,12 @@
       "description": "99% das respostas ficam abaixo deste tempo.",
       "gridPos": { "h": 4, "w": 3, "x": 18, "y": 0 },
       "datasource": "Loki",
-      "targets": [{ "refId": "A", "expr": "quantile_over_time(0.99, {container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | unwrap http_duration_ms [5m])" }]
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "quantile_over_time(0.99, {container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | unwrap http_duration_ms [5m])"
+        }
+      ]
     },
     {
       "id": 8,
@@ -82,7 +117,12 @@
       "description": "Percentual de requisições concluídas sem erro.",
       "gridPos": { "h": 4, "w": 3, "x": 21, "y": 0 },
       "datasource": "Loki",
-      "targets": [{ "refId": "A", "expr": "100 * sum(rate({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | http_success=true [1m])) / sum(rate({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" [1m]))" }]
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "100 * sum(rate({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | http_success=\"true\" [1m])) / sum(rate({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" [1m]))"
+        }
+      ]
     },
     {
       "id": 9,
@@ -91,7 +131,13 @@
       "description": "Ritmo de atendimento da API ao longo do tempo.",
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 4 },
       "datasource": "Loki",
-      "targets": [{ "refId": "A", "expr": "sum(rate({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" [1m]))", "legendFormat": "RPS" }]
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" [1m]))",
+          "legendFormat": "RPS"
+        }
+      ]
     },
     {
       "id": 10,
@@ -100,7 +146,13 @@
       "description": "Quantidade de requisições processadas por minuto.",
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 12 },
       "datasource": "Loki",
-      "targets": [{ "refId": "A", "expr": "sum(count_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" [1m]))", "legendFormat": "Requests/min" }]
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" [1m]))",
+          "legendFormat": "Requests/min"
+        }
+      ]
     },
     {
       "id": 11,
@@ -110,9 +162,21 @@
       "gridPos": { "h": 8, "w": 12, "x": 0, "y": 20 },
       "datasource": "Loki",
       "targets": [
-        { "refId": "A", "expr": "quantile_over_time(0.50, {container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | unwrap http_duration_ms [5m])", "legendFormat": "p50" },
-        { "refId": "B", "expr": "quantile_over_time(0.95, {container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | unwrap http_duration_ms [5m])", "legendFormat": "p95" },
-        { "refId": "C", "expr": "quantile_over_time(0.99, {container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | unwrap http_duration_ms [5m])", "legendFormat": "p99" }
+        {
+          "refId": "A",
+          "expr": "quantile_over_time(0.50, {container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | unwrap http_duration_ms [5m])",
+          "legendFormat": "p50"
+        },
+        {
+          "refId": "B",
+          "expr": "quantile_over_time(0.95, {container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | unwrap http_duration_ms [5m])",
+          "legendFormat": "p95"
+        },
+        {
+          "refId": "C",
+          "expr": "quantile_over_time(0.99, {container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | unwrap http_duration_ms [5m])",
+          "legendFormat": "p99"
+        }
       ]
     },
     {
@@ -123,8 +187,16 @@
       "gridPos": { "h": 8, "w": 12, "x": 12, "y": 20 },
       "datasource": "Loki",
       "targets": [
-        { "refId": "A", "expr": "sum(rate({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | http_success=true [1m]))", "legendFormat": "Sucesso/s" },
-        { "refId": "B", "expr": "sum(rate({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | http_success=false [1m]))", "legendFormat": "Erro/s" }
+        {
+          "refId": "A",
+          "expr": "sum(rate({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | http_success=\"true\" [1m]))",
+          "legendFormat": "Sucesso/s"
+        },
+        {
+          "refId": "B",
+          "expr": "sum(rate({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | http_success=\"false\" [1m]))",
+          "legendFormat": "Erro/s"
+        }
       ]
     },
     {
@@ -134,7 +206,13 @@
       "description": "Mostra quais rotas recebem mais requisições por minuto.",
       "gridPos": { "h": 8, "w": 12, "x": 0, "y": 28 },
       "datasource": "Loki",
-      "targets": [{ "refId": "A", "expr": "sum by (http_route) (count_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json [5m]))", "legendFormat": "{{http_route}}" }]
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (http_route) (count_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json [5m]))",
+          "legendFormat": "{{http_route}}"
+        }
+      ]
     },
     {
       "id": 14,
@@ -143,7 +221,13 @@
       "description": "Compara o tempo médio de resposta entre as rotas.",
       "gridPos": { "h": 8, "w": 12, "x": 12, "y": 28 },
       "datasource": "Loki",
-      "targets": [{ "refId": "A", "expr": "avg by (http_route) (avg_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | unwrap http_duration_ms [5m]))", "legendFormat": "{{http_route}}" }]
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "avg by (http_route) (avg_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | unwrap http_duration_ms [5m]))",
+          "legendFormat": "{{http_route}}"
+        }
+      ]
     },
     {
       "id": 15,
@@ -152,7 +236,13 @@
       "description": "Contagem de respostas lentas (acima de 300ms).",
       "gridPos": { "h": 6, "w": 8, "x": 0, "y": 36 },
       "datasource": "Loki",
-      "targets": [{ "refId": "A", "expr": "sum(count_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | http_slow=true [1m]))", "legendFormat": "Lentas/min" }]
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | http_slow=\"true\" [1m]))",
+          "legendFormat": "Lentas/min"
+        }
+      ]
     },
     {
       "id": 16,
@@ -161,7 +251,13 @@
       "description": "Quanto da CPU do processo da API está sendo usado.",
       "gridPos": { "h": 6, "w": 8, "x": 8, "y": 36 },
       "datasource": "Loki",
-      "targets": [{ "refId": "A", "expr": "avg_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.runtime\\\"\" | json | unwrap runtime_cpu_usage_percent [1m])", "legendFormat": "CPU %" }]
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "clamp_max(sum by () (avg_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.runtime\\\"\" | json | unwrap runtime_cpu_usage_percent [1m])), 100)",
+          "legendFormat": "CPU %"
+        }
+      ]
     },
     {
       "id": 17,
@@ -170,7 +266,13 @@
       "description": "Atraso interno da aplicação para processar tarefas. Quanto menor, melhor.",
       "gridPos": { "h": 6, "w": 8, "x": 16, "y": 36 },
       "datasource": "Loki",
-      "targets": [{ "refId": "A", "expr": "avg_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.runtime\\\"\" | json | unwrap runtime_event_loop_lag_ms [1m])", "legendFormat": "Lag (ms)" }]
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by () (avg_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.runtime\\\"\" | json | unwrap runtime_event_loop_lag_ms [1m]))",
+          "legendFormat": "Lag (ms)"
+        }
+      ]
     },
     {
       "id": 18,
@@ -180,8 +282,16 @@
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 42 },
       "datasource": "Loki",
       "targets": [
-        { "refId": "A", "expr": "avg_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.runtime\\\"\" | json | unwrap runtime_memory_rss_mb [1m])", "legendFormat": "RSS (MB)" },
-        { "refId": "B", "expr": "avg_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.runtime\\\"\" | json | unwrap runtime_memory_heap_used_mb [1m])", "legendFormat": "Heap usado (MB)" }
+        {
+          "refId": "A",
+          "expr": "sum by () (avg_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.runtime\\\"\" | json | unwrap runtime_memory_rss_mb [1m]))",
+          "legendFormat": "RSS (MB)"
+        },
+        {
+          "refId": "B",
+          "expr": "sum by () (avg_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.runtime\\\"\" | json | unwrap runtime_memory_heap_used_mb [1m]))",
+          "legendFormat": "Heap usado (MB)"
+        }
       ]
     },
     {
@@ -192,8 +302,16 @@
       "gridPos": { "h": 8, "w": 12, "x": 0, "y": 50 },
       "datasource": "Loki",
       "targets": [
-        { "refId": "A", "expr": "sum(count_over_time({container=\"gac_api\"} |= \"user node created\" [1m]))", "legendFormat": "Usuários criados/min" },
-        { "refId": "B", "expr": "sum(count_over_time({container=\"gac_api\"} |= \"group node created\" [1m]))", "legendFormat": "Grupos criados/min" }
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({container=\"gac_api\"} |= \"user node created\" [1m]))",
+          "legendFormat": "Usuários criados/min"
+        },
+        {
+          "refId": "B",
+          "expr": "sum(count_over_time({container=\"gac_api\"} |= \"group node created\" [1m]))",
+          "legendFormat": "Grupos criados/min"
+        }
       ]
     },
     {
@@ -203,7 +321,13 @@
       "description": "Ajuda a identificar qual rota gera mais erro.",
       "gridPos": { "h": 8, "w": 12, "x": 12, "y": 50 },
       "datasource": "Loki",
-      "targets": [{ "refId": "A", "expr": "sum by (http_route) (count_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | http_success=false [5m]))", "legendFormat": "{{http_route}}" }]
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (http_route) (count_over_time({container=\"gac_api\"} |= \"\\\"event.dataset\\\":\\\"gac.http\\\"\" | json | http_success=\"false\" [5m]))",
+          "legendFormat": "{{http_route}}"
+        }
+      ]
     },
     {
       "id": 21,
@@ -219,7 +343,12 @@
       "title": "Apenas erros",
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 66 },
       "datasource": "Loki",
-      "targets": [{ "refId": "A", "expr": "{container=\"gac_api\"} |= \"\\\"log.level\\\":\\\"error\\\"\"" }]
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{container=\"gac_api\"} |= \"\\\"log.level\\\":\\\"error\\\"\""
+        }
+      ]
     }
   ]
 }
